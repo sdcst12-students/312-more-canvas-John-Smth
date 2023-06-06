@@ -7,41 +7,99 @@
 
 
 import tkinter as tk
-import itertools
-"""
-Task 1
-Read the map1.txt file and convert to a map that you can navigate a
-rectangle object through.
-"""
+
+
+tile=0
+
+
 w = tk.Tk()
-w.geometry("925x475")
-w.attributes('-topmost',True)
-c = tk.Canvas(height=475,width=900,bg="#ffdddd")
+w.geometry("600x400")
+w.title("sample")
+
+
+c = tk.Canvas(width=550,height=450,background="#cccccc",bd="2")
 c.pack()
-f = open('map1.txt')
-fr=f.read()
-frs=fr.split('\n')
-print(frs)
 
 
-maze=[]
+img = tk.PhotoImage(file="assets/win.png")
+img2 = tk.PhotoImage(file="assets/winb.png")
+wim = c.create_image(200,100,image=img)
 
 
-for k in range(0,15):
-    for (i,j) in itertools.zip_longest(frs[k],range(len(frs[k]))):
-        if i=='*':
-            maze.append(c.create_rectangle(0+j*31,0+k*31,31+j*31,31+k*31,fill='#000000'))
+rec = c.create_image(50,80,image=img)
+
+
+def update():
+    #print(wim.image())
+    #if wim.image()==img2:
+        #ig = img
+    #else:
+    global tile
+    ig = None
+    tile +=1
+    tile = tile%2
+    if tile:
+        ig = img2
+    else:
+        ig = img
+
+
+    c.itemconfig(rec,image=ig)
+
+
+def keyPress(e):
+
+
+    if e.keysym == 'Left':
+        if (c.coords(rec))[0] == 5:
+            print('')
         else:
-            pass
+            print(e)
+            x=-5
+            y=0
+            c.move(rec,x,y)
+            print(c.coords(rec))
+        update()
+    if e.keysym == 'Right':
+        if (c.coords(rec))[0] == 520:
+            print('')
+        else:
+            print(e)
+            x=5
+            y=0
+            c.move(rec,x,y)
+            print(c.coords(rec))
+        update()
+    if e.keysym == 'Up':
+        if (c.coords(rec))[1] == 5:
+            print('')
+        else:
+            print(e)
+            x=0
+            y=-5
+            c.move(rec,x,y)
+            print(c.coords(rec))
+        update()
+    if e.keysym == 'Down':
+        if (c.coords(rec))[1] == 365:
+            print('')
+        else:
+            print(e)
+            x=0
+            y=5
+            c.move(rec,x,y)
+            print(c.coords(rec))
+        update()
 
 
+    print(e)
+    print(e.keycode, e.keysym, e.x, e.y)
 
 
-'''
-1-29
-30-59
-etc
-'''
+w.bind("<Left>",keyPress)
+w.bind("<Right>",keyPress)
+w.bind("<Up>",keyPress)
+w.bind("<Down>",keyPress)
 
 
 
